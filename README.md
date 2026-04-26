@@ -4,8 +4,7 @@
 
 ### when karpathy tweet, ape code.
 
-[![PyPI](https://img.shields.io/pypi/v/auto-karpathy.svg)](https://pypi.org/project/auto-karpathy/)
-[![Python](https://img.shields.io/pypi/pyversions/auto-karpathy.svg)](https://pypi.org/project/auto-karpathy/)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Built with Claude Agent SDK](https://img.shields.io/badge/built%20with-claude--agent--sdk-D97757.svg)](https://github.com/anthropics/claude-agent-sdk-python)
 
@@ -37,13 +36,22 @@ it caveman. it cursed. it *truly work*.
 ## one-line install
 
 ```bash
-pipx install auto-karpathy
+git clone https://github.com/JuliusBrussee/auto-karpathy && cd auto-karpathy && pipx install .
 ```
 
-or, modern ape:
+or, modern ape (uv):
 
 ```bash
-uv tool install auto-karpathy
+git clone https://github.com/JuliusBrussee/auto-karpathy && cd auto-karpathy && uv tool install .
+```
+
+or, no-pipx ape (just venv):
+
+```bash
+git clone https://github.com/JuliusBrussee/auto-karpathy
+cd auto-karpathy
+python -m venv .venv && source .venv/bin/activate
+pip install -e .
 ```
 
 then auth claude code once (`claude` itself ships in the sdk):
@@ -106,13 +114,20 @@ state stored in `~/.local/state/auto-karpathy/seen.json` so `--watch` not redo s
 
 ```bash
 # default — public scraping only
-pipx install auto-karpathy
+git clone https://github.com/JuliusBrussee/auto-karpathy
+cd auto-karpathy
+pipx install .
 
 # with twikit (auth-backed scraping if public ones get blocked)
-pipx install 'auto-karpathy[auth]'
+pipx install '.[auth]'
 
-# bleeding edge from source
+# directly via pipx, no clone
 pipx install git+https://github.com/JuliusBrussee/auto-karpathy
+
+# editable / dev install
+git clone https://github.com/JuliusBrussee/auto-karpathy
+cd auto-karpathy
+pip install -e '.[dev,auth]'
 ```
 
 ## examples
@@ -233,6 +248,7 @@ PRs welcome. ideas welcome. caveman speak welcome but optional.
 ```bash
 git clone https://github.com/JuliusBrussee/auto-karpathy
 cd auto-karpathy
+python -m venv .venv && source .venv/bin/activate
 pip install -e '.[dev,auth]'
 pytest
 ```
