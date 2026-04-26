@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "auto-karpathy"
+version = "0.1.0"
+description = "When Karpathy tweet, ape code. Auto-builds a repo from his latest tweets using Claude agents."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Julius Brussee" }]
+keywords = ["claude", "agents", "karpathy", "twitter", "vibe-coding", "caveman", "automation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Internet",
+]
+dependencies = [
+    "claude-agent-sdk>=0.1.0",
+    "anyio>=4.0",
+    "click>=8.1",
+    "rich>=13.0",
+    "httpx>=0.27",
+    "pydantic>=2.0",
+    "platformdirs>=4.0",
+]
+
+[project.optional-dependencies]
+auth = ["twikit>=2.0"]
+dev = ["pytest>=7.0", "pytest-asyncio>=0.23", "ruff>=0.5"]
+
+[project.scripts]
+auto-karpathy = "auto_karpathy.cli:main"
+karpathify = "auto_karpathy.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/JuliusBrussee/auto-karpathy"
+Repository = "https://github.com/JuliusBrussee/auto-karpathy"
+Issues = "https://github.com/JuliusBrussee/auto-karpathy/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/auto_karpathy"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

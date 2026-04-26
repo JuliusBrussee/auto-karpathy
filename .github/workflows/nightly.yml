@@ -1,0 +1,30 @@
+name: nightly autopilot
+
+# example workflow: run auto-karpathy nightly and push generated repos
+# to your account. you must:
+#   1. set ANTHROPIC_API_KEY as a repo secret
+#   2. set GH_PAT as a personal access token with `repo` scope
+#   3. uncomment the schedule trigger below
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "0 6 * * *"  # 06:00 UTC daily
+
+jobs:
+  ape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: gh auth
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: echo "$GH_TOKEN" | gh auth login --with-token
+      - name: run auto-karpathy
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: auto-karpathy run --user karpathy --limit 5 --threshold 0.7 --push
