@@ -1,17 +1,21 @@
 <div align="center">
 
-# auto-karpathy
+# 🦍 auto-karpathy
 
-### when karpathy tweet, ape code.
+### **karpathy tweet → ape ship repo → you collect star**
 
-[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Built with Claude Agent SDK](https://img.shields.io/badge/built%20with-claude--agent--sdk-D97757.svg)](https://github.com/anthropics/claude-agent-sdk-python)
+[![Built with Claude Agent SDK](https://img.shields.io/badge/built%20with-claude--agent--sdk-D97757)](https://github.com/anthropics/claude-agent-sdk-python)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-orange.svg)](#contributing)
+
+`scrape karpathy timeline` · `claude agent triages tweet` · `claude agent builds working repo` · `you sleep`
 
 ```
-   ┌──────────────────────────────────────────────┐
-   │  karpathy tweet  →  ape watch  →  repo born  │
-   └──────────────────────────────────────────────┘
+┌──────────────┐   ┌──────────────┐   ┌───────────────┐   ┌──────────┐
+│   scrape     │──▶│ triage agent │──▶│ builder agent │──▶│ git push │
+│  4 sources   │   │   (claude)   │   │ (claude+tools)│   │  --push  │
+└──────────────┘   └──────────────┘   └───────────────┘   └──────────┘
 ```
 
 **ape no read. ape no think. ape ship.**
@@ -20,178 +24,112 @@
 
 ---
 
-## what this be
+## 🚀 the pitch
 
-every week some guy on X tweet **"i built [thing] from a karpathy tweet 🚀"** and grow 10k follower.
+every week some guy on X tweets *"i built [thing] from a karpathy tweet 🚀"* and grows 10k followers.
 
-**this tool that guy.**
+**this tool is that guy.** it reads karpathy's timeline, picks buildable tweets, ships working repos with passing smoke tests, optionally pushes to your github. you wake up to stars. pretend it was you.
 
-`auto-karpathy` watch karpathy timeline. claude agent read tweet. claude agent build repo. you sleep. wake up. star count go up. pretend it was you.
+> Built on the official [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python). pure claude-native. no langchain in cave.
 
-it caveman. it cursed. it *truly work*.
-
-> [!IMPORTANT]
-> built on the official [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python). pure claude-native. no langchain in cave.
-
-## one-line install
+## ⚡ quickstart
 
 ```bash
 git clone https://github.com/JuliusBrussee/auto-karpathy && cd auto-karpathy && pipx install .
+claude          # auth once, then quit
+auto-karpathy   # ape go.
 ```
 
-or, modern ape (uv):
+<sub>that's it. ape grabs last 10 tweets, picks the buildable ones, drops repos in `./repos/<slug>/` with green smoke tests.</sub>
 
-```bash
-git clone https://github.com/JuliusBrussee/auto-karpathy && cd auto-karpathy && uv tool install .
-```
-
-or, no-pipx ape (just venv):
-
-```bash
-git clone https://github.com/JuliusBrussee/auto-karpathy
-cd auto-karpathy
-python -m venv .venv && source .venv/bin/activate
-pip install -e .
-```
-
-then auth claude code once (`claude` itself ships in the sdk):
-
-```bash
-claude  # log in, then quit
-```
-
-done. ape ready.
-
-## one-line use
-
-```bash
-auto-karpathy
-```
-
-that it. ape go scrape last 10 karpathy tweet, decide which one buildable, claude agent code each one into `./repos/<slug>/`, run smoke test until green.
-
-## what it actually do
-
-```
-┌─────────────┐   ┌──────────────┐   ┌───────────────┐   ┌─────────┐
-│ scrape       │──▶│ triage agent │──▶│ builder agent │──▶│ git +   │
-│ (4 sources)  │   │ (claude)     │   │ (claude+tools)│   │ gh push │
-└─────────────┘   └──────────────┘   └───────────────┘   └─────────┘
-```
-
-1. **scrape** — try `syndication.twitter.com` → public nitter mirrors → optional twikit (auth) → final fallback: a claude agent with `WebFetch`+`WebSearch` that figure it out anyway.
-2. **triage agent** — claude read tweet, decide: buildable idea? if yes, propose project name + slug.
-3. **builder agent** — claude with `Read`/`Write`/`Edit`/`Bash` tools writes a real repo: code, README, LICENSE, smoke test, `.gitignore`, deps. **runs the smoke test until it passes.**
-4. **`--push`** (optional) — runs `gh repo create … --push` so the repo lives on github before you finish your coffee.
-
-state stored in `~/.local/state/auto-karpathy/seen.json` so `--watch` not redo same tweet.
-
-## commands
+## 🎯 commands & flags
 
 | command | what ape do |
 |---|---|
-| `auto-karpathy` | one-shot. equivalent to `auto-karpathy run` |
-| `auto-karpathy run` | scrape latest, triage, build the buildable ones |
-| `auto-karpathy build <tweet-url>` | build from one specific tweet (forced) |
-| `auto-karpathy watch --interval 600` | poll every 10 min, build new tweets forever |
-| `auto-karpathy scrape` | just scrape and print. no agent. no token spend |
-
-## flags
+| `auto-karpathy` | one-shot: scrape, triage, build (alias for `run`) |
+| `auto-karpathy build <tweet-url>` | force-build one specific tweet |
+| `auto-karpathy watch --interval 600` | poll every 10 min, build forever |
+| `auto-karpathy scrape` | scrape & print only — no agent, no tokens |
 
 | flag | default | what |
 |---|---|---|
-| `-u, --user` | `karpathy` | any X handle. yes, you can `--user elonmusk`. ape don't judge |
-| `-n, --limit` | `10` | how many recent tweets to grab |
+| `-u, --user` | `karpathy` | any X handle. yes, `--user elonmusk` works. ape don't judge |
+| `-n, --limit` | `10` | recent tweets to grab |
 | `-o, --output` | `./repos` | where to drop generated repos |
 | `--threshold` | `0.5` | min triage confidence to build |
-| `--cookies` | none | `cookies.json` for auth-backed scrape (install `auto-karpathy[auth]`) |
-| `--push` | off | `gh repo create` + push every built repo |
-| `--private` | off | make the pushed repos private |
-| `--dry-run` | off | triage only. no build, no push. recon mode |
+| `--cookies` | – | `cookies.json` for auth scrape (needs `[auth]` extra) |
+| `--push` / `--private` | off | `gh repo create` + push (private optional) |
+| `--dry-run` | off | triage only — recon mode, no token spend on builds |
 | `--all` | off | re-process tweets already seen |
 
-## install variants
+## 🍌 examples
 
 ```bash
-# default — public scraping only
-git clone https://github.com/JuliusBrussee/auto-karpathy
-cd auto-karpathy
-pipx install .
+auto-karpathy --push                                            # build + push public
+auto-karpathy build https://x.com/karpathy/status/2030371219518931079
+auto-karpathy watch --interval 600 --push --private             # forever, private
+auto-karpathy --user ylecun                                     # ape farm anyone
+auto-karpathy --dry-run --threshold 0.8                         # cheap recon
+```
 
-# with twikit (auth-backed scraping if public ones get blocked)
+## 📦 every generated repo ships with
+
+`README.md` quoting source tweet · `LICENSE` (MIT) · `.gitignore` · runnable code (no stubs, no `pass`) · **smoke test the agent actually runs green** · pinned deps (`requirements.txt` / `pyproject.toml`) · `SUMMARY.md`
+
+<sub>builder retries up to 3× on red tests. if still red, repo is marked `success=False` and ape moves on.</sub>
+
+## 🛠️ install variants
+
+<details>
+<summary><b>pipx · uv · pip · auth · dev</b> — pick your flavor</summary>
+
+```bash
+# uv (modern ape)
+uv tool install .
+
+# pipx + auth-backed scraping (twikit fallback)
 pipx install '.[auth]'
 
-# directly via pipx, no clone
+# direct from github, no clone
 pipx install git+https://github.com/JuliusBrussee/auto-karpathy
 
-# editable / dev install
-git clone https://github.com/JuliusBrussee/auto-karpathy
-cd auto-karpathy
+# dev / editable
 pip install -e '.[dev,auth]'
+
+# plain venv, no pipx
+python -m venv .venv && source .venv/bin/activate && pip install -e .
 ```
 
-## examples
+</details>
 
-```bash
-# scrape karpathy, build everything buildable, push to your github
-auto-karpathy --push
+## 🧠 how it works
 
-# one specific tweet
-auto-karpathy build https://x.com/karpathy/status/2030371219518931079
+1. **scrape** — `syndication.twitter.com` → public nitter mirrors → optional `twikit` (auth) → final fallback: a claude agent with `WebFetch`+`WebSearch` that figures it out anyway
+2. **triage agent** — claude reads tweet, decides *buildable?* + proposes name/slug
+3. **builder agent** — claude with `Read`/`Write`/`Edit`/`Bash` writes a real repo and **runs the smoke test until green**
+4. **`--push`** — `gh repo create … --push` so the repo lives on github before your coffee finishes
 
-# run forever, every 10 min, push as private
-auto-karpathy watch --interval 600 --push --private
+state lives in `~/.local/state/auto-karpathy/seen.json` so `--watch` doesn't redo work.
 
-# any handle. ape farm everyone now
-auto-karpathy --user ylecun
-
-# just see what would happen, don't spend tokens on building
-auto-karpathy --dry-run
-```
-
-## generated repos
-
-every repo `auto-karpathy` build come with:
-
-- `README.md` — quotes the source tweet at the top, one-line run instruction, honest about being auto-generated
-- `LICENSE` — MIT
-- `.gitignore`
-- runnable code (no stubs, no `pass`, builder agent forced to make it work)
-- a smoke test the agent **actually runs and gets green** before finishing
-- `requirements.txt` or `pyproject.toml` with pinned deps
-- `SUMMARY.md` — one-paragraph explanation of what got built
-
-if smoke test no green, builder retry up to 3 times. if still no green, repo marked `success=False` and ape move on.
-
-## sample output
+<details>
+<summary><b>sample run output</b></summary>
 
 ```
 $ auto-karpathy
-
-   ___       _         _  __                 _   _
-  / _ \     | |       | |/ /                | | | |
- / /_\ \_   _| |_ ___  | ' / __ _ _ __ _ __ | |_| |__  _   _
- |  _  | | | | __/ _ \ |  < / _` | '__| '_ \| __| '_ \| | | |
- | | | | |_| | || (_) || . \ (_| | |  | |_) | |_| | | | |_| |
- \_| |_/\__,_|\__\___/ \_|\_\__,_|_|  | .__/ \__|_| |_|\__, |
-                                      | |               __/ |
-                                      |_|              |___/
-            karpathy tweet -> ape code -> repo born
 
 ╭─────────────────────────────────────────────────────────╮
 │ ape look at @karpathy — checking last 10 tweet          │
 ╰─────────────────────────────────────────────────────────╯
                        caught tweet
-┏━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┏━━━┳━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ # ┃ id                   ┃ text                                  ┃
-┡━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+┡━━━╇━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
 │ 1 │ 2030371219518931079  │ I packaged up the "autoresearch"...  │
 │ 2 │ 2029112930241001234  │ nanochat now trains GPT-2 in 2 hr... │
 └───┴──────────────────────┴───────────────────────────────────────┘
 
 ──────────────── tweet 2030371219518931079 ────────────────
 > I packaged up the "autoresearch" project into a new...
-https://x.com/karpathy/status/2030371219518931079
 ape see karpathy tweet. ape build.
 
 triage agent thinking...
@@ -203,35 +141,15 @@ build ok -> ./repos/autoresearch-mini-931079 (8 files)
 repo birth complete. mother proud.
 ```
 
-## faq
+</details>
 
-**q: this is dystopian.**
-a: yes.
-
-**q: is this scraping legal?**
-a: read X's ToS. don't be the guy who pulls 1M tweets in 24h. we hit public endpoints with normal user-agent, like every browser does. you're responsible for what you point this at.
-
-**q: token cost?**
-a: triage = 1 short turn per tweet, ~1k tokens. build = `max_turns=60` per tweet, can be 50k–200k tokens depending on project size. use `--dry-run` first. use `--threshold 0.8` to skip junk.
-
-**q: it built broken code.**
-a: builder agent runs the smoke test before declaring success. if it lied, that's a claude problem, not an ape problem. open an issue.
-
-**q: my karpathy tweets aren't loading.**
-a: install with `[auth]` extra and pass `--cookies cookies.json`. dump from your logged-in browser. ape understand.
-
-**q: can it watch multiple users?**
-a: run multiple `watch` instances in tmux. ape parallel.
-
-**q: i actually built something useful with this.**
-a: don't tell anyone where you got the idea. that's the whole point. ape collude.
-
-## architecture
+<details>
+<summary><b>architecture</b></summary>
 
 ```
 src/auto_karpathy/
 ├── cli.py        # click CLI (run / build / watch / scrape)
-├── runner.py     # orchestrates scrape -> triage -> build -> push
+├── runner.py     # orchestrates scrape → triage → build → push
 ├── scraper.py    # syndication / nitter / twikit / claude-agent fallback
 ├── agents.py     # triage_tweet() + build_repo() on claude-agent-sdk
 ├── prompts.py    # system prompts for triage and builder
@@ -241,32 +159,53 @@ src/auto_karpathy/
 └── meme.py       # banner + caveman quotes
 ```
 
-## contributing
+</details>
+
+## ❓ faq
+
+<details>
+<summary><b>this is dystopian.</b></summary>yes.</details>
+
+<details>
+<summary><b>is this scraping legal?</b></summary>read X's ToS. don't pull 1M tweets in 24h. we hit public endpoints with normal user-agent like every browser. you're responsible for what you point this at.</details>
+
+<details>
+<summary><b>token cost?</b></summary>triage ≈ 1 short turn (~1k tokens) per tweet. build = <code>max_turns=60</code>, can be 50k–200k tokens depending on project size. use <code>--dry-run</code> first. raise <code>--threshold</code> to skip junk.</details>
+
+<details>
+<summary><b>it built broken code.</b></summary>builder runs the smoke test before declaring success. if it lied, that's a claude problem not an ape problem — open an issue.</details>
+
+<details>
+<summary><b>my karpathy tweets aren't loading.</b></summary>install with <code>[auth]</code> extra and pass <code>--cookies cookies.json</code>. dump from your logged-in browser. ape understand.</details>
+
+<details>
+<summary><b>can it watch multiple users?</b></summary>run multiple <code>watch</code> instances in tmux. ape parallel.</details>
+
+<details>
+<summary><b>i actually built something useful with this.</b></summary>don't tell anyone where you got the idea. that's the whole point. ape collude.</details>
+
+## 🤝 contributing
 
 PRs welcome. ideas welcome. caveman speak welcome but optional.
 
 ```bash
-git clone https://github.com/JuliusBrussee/auto-karpathy
-cd auto-karpathy
-python -m venv .venv && source .venv/bin/activate
-pip install -e '.[dev,auth]'
-pytest
+git clone https://github.com/JuliusBrussee/auto-karpathy && cd auto-karpathy
+pip install -e '.[dev,auth]' && pytest
 ```
 
-## license
+## 🔗 related ape work
+
+[**caveman**](https://github.com/JuliusBrussee/caveman) — same ape energy, save 75% tokens · [**cavekit**](https://github.com/JuliusBrussee/cavekit) — spec-driven dev, three commands, no sub-agents
+
+## 📜 license
 
 MIT. free like mass mammoth on open plain.
-
-## related ape work
-
-- [caveman](https://github.com/JuliusBrussee/caveman) — same ape energy, save 75% tokens
-- [cavekit](https://github.com/JuliusBrussee/cavekit) — spec-driven dev, three command, no sub-agent
 
 ---
 
 <div align="center">
 
-if `auto-karpathy` farm karpathy idea for you, leave star.<br/>
-ape star ape happy. ⭐
+**if `auto-karpathy` farm karpathy idea for you → leave star ⭐**<br/>
+<sub>ape star, ape happy.</sub>
 
 </div>
